@@ -1,0 +1,11 @@
+.bx{
+    font-size:  24px;
+}
+#userEmail{
+    
+}
+.password-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}

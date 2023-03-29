@@ -12,16 +12,23 @@
     "@chakra-ui/react": "^2.5.4",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "formik": "^2.2.9",
     "framer-motion": "^10.10.0",
     "i": "^0.3.7",
+    "localforage": "^1.10.0",
+    "match-sorter": "^6.3.1",
     "npm": "^9.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.9.0",
+    "sort-by": "^1.2.0",
+    "validator": "^13.9.0",
     "yup": "^1.0.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
+    "@types/validator": "^13.7.14",
     "@vitejs/plugin-react": "^3.1.0",
     "typescript": "^4.9.3",
     "vite": "^4.2.0"
