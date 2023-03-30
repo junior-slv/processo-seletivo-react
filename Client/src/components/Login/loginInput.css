@@ -1,11 +1,25 @@
 .bx{
     font-size:  24px;
 }
-#userEmail{
-    
-}
+
 .password-container{
     display: flex;
     align-items: center;
     flex-direction: column;
+}
+.email-input{
+    display: flex;
+}
+.email-input input{
+    background: none;
+    border: none;
+    border-bottom: 1px solid #000;
+}
+.password-input{
+    display: flex;
+}
+.password-input input{
+    background: none;
+    border: none;
+    border-bottom: 1px solid #000;
 }
