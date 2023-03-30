@@ -1,10 +1,9 @@
-.dashboard-container{
+.colegio-container{
     display: flex;
 }
-.dashboard-content{
+.colegio-content{
     box-sizing: border-box;
     width: 100vw;
     display: flex;
     overflow-wrap: break-word;
 }
-
