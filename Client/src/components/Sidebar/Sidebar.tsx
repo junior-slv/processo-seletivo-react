@@ -12,7 +12,8 @@ const Sidebar = () => {
   return (
     <div className="sidebar-container">
       <div className="sidebar-toggle" onClick={handleSidebar}>
-      <i className='bx bx-menu'></i>
+      <i className='bx bx-menu'/>
+      <Link to="/"><i className='bx bx-log-out'/></Link>
       </div>
       <div className={isOpen ? "sidebar-open" : "sidebar-closed"}>
         <ul>
@@ -20,6 +21,7 @@ const Sidebar = () => {
           <Link to="/colegio"><li>Colégio</li></Link>
           <Link to="/salas"><li>Salas</li></Link>
         </ul>
+
       </div>
     </div>
   );

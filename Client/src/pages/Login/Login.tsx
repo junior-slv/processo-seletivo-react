@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const Login = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [themeToggle, setThemeToggle] = useState(false)
+  const [themeToggle, setThemeToggle] = useState(false);
   const sendLogin = () => {
     if (email === "admin" && password === "admin") {
       setIsAuthenticated(true);
@@ -39,11 +39,12 @@ const Login = () => {
           <Link to={isAuthenticated ? "/dashboard" : "/"}>
             {" "}
             <input onClick={sendLogin} type="button" value="ENVIAR >" />
-
           </Link>
-
         </div>
-        <i onClick={() => setThemeToggle(!themeToggle)} className='bx bx-sun' ></i>
+        <i
+          onClick={() => setThemeToggle(!themeToggle)}
+          className="bx bx-sun"
+        ></i>
       </div>
     </div>
   );
