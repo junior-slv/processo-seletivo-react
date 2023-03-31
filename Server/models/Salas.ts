@@ -1,4 +1,4 @@
-"use strict";
+
 import { Model } from "sequelize";
 
 interface SalasAttributes {
@@ -13,8 +13,7 @@ interface SalasAttributes {
 
 
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Salas extends Model<SalasAttributes> 
-  implements SalasAttributes{
+  class Salas extends Model<SalasAttributes>implements SalasAttributes{
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -69,8 +68,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
     },
     {
-      modelName: 'Salas',
       sequelize,
+      modelName: 'Salas',
     }
   );
   return Salas;

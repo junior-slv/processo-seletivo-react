@@ -1,4 +1,3 @@
-"use strict";
 import { Model } from "sequelize";
 
 interface UserAttributes{
@@ -45,8 +44,8 @@ module.exports = (sequelize: any, DataTypes: any) => {
       },
     },
     {
-      modelName: 'User',
       sequelize,
+      modelName: 'User',
     }
   );
   return User;
