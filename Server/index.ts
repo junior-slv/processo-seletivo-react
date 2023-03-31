@@ -1,7 +1,26 @@
-import { sequelize } from './Sequelize';
-import { app } from './app';
+import express from 'express';
+const app = express();
+const port = process.env.PORT || 3001;
+import db from './models';
+import {users} from './seeders/users';
 
-sequelize.sync().then(() => {
-  console.log('Database synced');
-  app.listen(3000, () => console.log('Server started'));
+const createUsers = () => {
+    users.map(user => {
+        db.User.create(user)
+    })
+}
+
+app.post('/', (req, res) => {
+    db.User.create({
+        userLogin: "matheus2",
+        userPassword: "aifoda2",
+    })
+})
+
+
+db.sequelize.sync().then(() => {
+    app.listen(port, () =>{
+        console.log(`app listenem port ${port}`);
+        
+    })
 })

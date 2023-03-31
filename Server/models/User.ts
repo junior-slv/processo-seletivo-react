@@ -1,23 +1,53 @@
-import { Model, Column, DataType, Table } from 'sequelize-typescript';
-import * as bcrypt from 'bcrypt';
+"use strict";
+import { Model } from "sequelize";
 
-@Table({ tableName: 'users' })
-export class User extends Model<User> {
-  @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
-  id: number;
+interface UserAttributes{
+  id: number,
+  userLogin: string,
+  userPassword: string,
+}
 
-  @Column({ type: DataType.STRING, allowNull: false })
-  login: string;
 
-  @Column({ type: DataType.STRING, allowNull: false, set: hashPassword })
-  password: string;
+module.exports = (sequelize: any, DataTypes: any) => {
+  class User extends Model<UserAttributes> 
+  implements UserAttributes{
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    id!: number;
+    userLogin!: string;
+    userPassword!: string;
 
-  async validatePassword(password: string): Promise<boolean> {
-    return bcrypt.compare(password, this.password);
+    readonly createdAt!: Date;
+    readonly updatedAt!: Date;
+    static associate(models: any) {
+      // define association here
+
+    }
   }
-}
-
-function hashPassword(password: string): string {
-  const salt = bcrypt.genSaltSync();
-  return bcrypt.hashSync(password, salt);
-}
+  User.init(
+    {
+      id: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      userLogin: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+        unique: true,
+      },
+      userPassword: {
+        type: DataTypes.STRING(128),
+        allowNull: false,
+      },
+    },
+    {
+      modelName: 'User',
+      sequelize,
+    }
+  );
+  return User;
+};
