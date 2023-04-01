@@ -48,8 +48,15 @@
     background-color: #444;
   }
   
-  @media screen and (max-width: 768px) {
-    .sidebar-open {
-      width: 200px;
-    }
+
+  @media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+  .sidebar-open {
+    width: 200px;
   }
+  .sidebar-container {
+    display: flex;
+    height: 25vh;
+  }
+}
