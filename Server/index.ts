@@ -4,7 +4,7 @@ const port = process.env.PORT || 3001;
 const cors = require('cors')
 import db from "./models";
 var corsOptions = {
-    origin: "http://localhost:3001"
+    origin: "http://127.0.0.1:5173"
 }
 
 //middleware
