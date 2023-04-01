@@ -1,29 +1,37 @@
-import { Model } from 'sequelize';
+import { Model } from "sequelize";
 
-interface ColegiosAttributes {
-  id: number;
-  nome: string;
-  estado: string;
-  cidade: string;
-  simbolo: string | null;
+interface ColegioAttributes{
+  id: number,
+  nome:string,
+  estado:string,
+  cidade:string,
+  simbolo:string,
+  
 }
 
+
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Colegios extends Model<ColegiosAttributes> implements ColegiosAttributes {
+  class Colegio extends Model<ColegioAttributes> 
+  implements ColegioAttributes{
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
     id!: number;
-    nome!: string;
-    estado!: string;
-    cidade!: string;
-    simbolo!: string | null;
+    nome!:string;
+    estado!:string;
+    cidade!:string;
+    simbolo!:string;
 
     readonly createdAt!: Date;
     readonly updatedAt!: Date;
-
     static associate(models: any) {
       // define association here
+
     }
   }
-  Colegios.init(
+  Colegio.init(
     {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -31,26 +39,26 @@ module.exports = (sequelize: any, DataTypes: any) => {
         primaryKey: true,
       },
       nome: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(128),
         allowNull: false,
       },
       estado: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(128),
         allowNull: false,
       },
       cidade: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(128),
         allowNull: false,
       },
       simbolo: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        type: DataTypes.STRING(128),
+        allowNull: false,
       },
     },
     {
       sequelize,
-      modelName: 'Colegios',
+      modelName: 'Colegio',
     }
   );
-  return Colegios;
+  return Colegio;
 };

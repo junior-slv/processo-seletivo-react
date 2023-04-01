@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       id: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       nome: {
         type: Sequelize.STRING

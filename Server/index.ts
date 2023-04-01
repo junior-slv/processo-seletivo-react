@@ -2,30 +2,30 @@ import express from 'express';
 const app = express();
 const port = process.env.PORT || 3001;
 import db from './models';
-import {users} from './seeders/users';
-import {salas} from './seeders/salas';
-import { colegios } from './seeders/colegios';
+// import {users} from './seeders/users';
+// import { colegios } from './seeders/colegios';
 
-const createUsers = () => {
-    users.map(user => {
-        db.User.create(user)
-    })
-}
+const usuarios = db.User.findAll();
+console.log("tabela de"+usuarios);
 
-const createSala = () => {
-    salas.map(sala => {
-        db.Salas.create(sala)
-    })
-}
-const createColegio = () => {
-    colegios.map(colegio => {
-        db.Colegios.create(colegio)
-    })
-}
+// const createUsers = () => {
+//     users.map(user => {
+//         db.User.create(user)
+//     })
+// }
+// const createColegios = () => {
+//     colegios.map(colegio => {
+//         db.Colegio.create(colegio)
+//     })
+// }
 
-createUsers();
-createSala();
-createColegio();
+// const createSalas = () => {
+//     salas.map(sala => {
+//         db.Sala.create(sala)
+//     })
+// }
+// createSalas();
+// createColegios();
 
 app.post('/', (req: any, res:any ) => {
     db.User.create({
