@@ -30,7 +30,7 @@ const getColegio = async (req: any, res: any) => {
 //atualizar colegio
 const updateColegio = async (req: any, res: any) => {
   let id = req.params.id;
-  const colegio = await Colegio.update(req.body, { where: { id: id } });
+  const colegio = await db.Colegio.update(req.body, { where: { id: id } });
   res.status(200).send(colegio);
 };
 

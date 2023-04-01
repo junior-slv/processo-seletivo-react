@@ -14,7 +14,8 @@ module.exports = {
         unique: true,
       },
       capacidadeMesas: {
-        type: DataTypes.INTEGER.UNSIGNED,
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       bloqueada: {
         type: DataTypes.BOOLEAN,
