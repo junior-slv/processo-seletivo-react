@@ -1,8 +1,8 @@
-export const colegios  = [
-    {
-        nome: 'tes',
-        estado: 'tes2',
-        cidade: 'tes3',
-        simbolo: 'tes4',
-    },
-]
+export const colegios = [
+  {
+    nome: "22",
+    estado: "asdaf",
+    cidade: "fsdfsd",
+    simbolo: "as",
+  },
+];
