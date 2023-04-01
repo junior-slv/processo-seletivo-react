@@ -1,4 +1,6 @@
 import db from "../models";
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const User: any = db.users;
 
@@ -37,11 +39,34 @@ const deleteUser = async (req: any, res: any) => {
     await db.User.destroy({ where: {id: id}})
     res.status(200).send("Usuário removido!");
   };
+//logar
+const logarUser = async (req: any, res: any) => {
+  
+  const { userLogin, userPassword } = req.body;
+  const user = await db.User.findOne({ where: { userLogin } });
+  
+  if (!user) {
+    console.log("true");
+    return res.status(401).json({ message: 'Usuário não encontrado' });
+  }
+  
+  const passwordMatch = await bcrypt.compare(userPassword, user.userPassword);
 
+  if (!passwordMatch) {
+    return res.status(401).json({ message: 'Senha incorreta' });
+
+    
+  }
+  res.status(200).send("Usuário encontrado!");
+  const token = jwt.sign({ userId: user.id }, 'chave_secreta');
+
+  res.status(200).json({ token });
+};
 module.exports = {
     addUser,
     getAllUsers,
     getUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    logarUser
 }
