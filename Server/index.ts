@@ -28,6 +28,6 @@ app.use('/api/salas', salaRouter)
 
 db.sequelize.sync().then(() => {
   app.listen(port, () => {
-    console.log(`app listenem port ${port}`);
+    console.log(`Rodando na porta: ${port}`);
   });
 });

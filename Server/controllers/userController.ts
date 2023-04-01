@@ -6,12 +6,17 @@ const User: any = db.users;
 
 //adicionar usuario
 const addUser = async (req: any, res: any) => {
-  let info = {
-    userLogin: req.body.userLogin,
-    userPassword: req.body.userPassword,
-  };
-  const user = await db.User.create(info);
-  res.status(200).send(user);
+  try {
+    let info = {
+      userLogin: req.body.userLogin,
+      userPassword: req.body.userPassword,
+    };
+    const user = await db.User.create(info);
+    res.status(200).send(user);
+  } catch (ex) {
+    console.error(ex);
+    res.status(412);
+  }
 };
 //mostrar todos os usuarios
 const getAllUsers = async (req: any, res: any) => {
@@ -57,7 +62,7 @@ const logarUser = async (req: any, res: any) => {
 
     
   }
-  res.status(200).send("Usuário encontrado!");
+  // res.status(200).send("Usuário encontrado!");
   const token = jwt.sign({ userId: user.id }, 'chave_secreta');
 
   res.status(200).json({ token });

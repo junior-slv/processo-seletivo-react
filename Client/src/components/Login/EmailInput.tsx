@@ -1,17 +1,12 @@
 import React, { useState } from "react";
 import validator from "validator";
 import "./loginInput.css";
-export var email: string;
+export var user: string;
 const LoginInput = () => {
-  const [emailError, setEmailError] = useState("");
+  const [userError, setUserError] = useState("");
   const validateEmail = (e: React.FormEvent<HTMLInputElement>) => {
-    email = e.currentTarget.value;
+    user = e.currentTarget.value;
     
-    if (validator.isEmail(email)) {
-      setEmailError(" ");
-    } else {
-      setEmailError("Insira um email válido!");
-    }
   };
   return (
     <div className="email-container">
@@ -26,7 +21,7 @@ const LoginInput = () => {
       <br />
 
       </div>
-      <span>{emailError}</span>
+      <span>{userError}</span>
     </div>
   );
 };
