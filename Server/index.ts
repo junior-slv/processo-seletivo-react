@@ -19,8 +19,10 @@ app.use((err:any, req:any, res:any, next:any) => {
 
 
 //routes
-const router = require('./routes/userRoutes')
-app.use('/api/users', router)
+const userRouter = require('./routes/userRoutes')
+app.use('/api/users', userRouter)
+const colegioRouter = require('./routes/colegioRoutes')
+app.use('/api/colegios', colegioRouter)
 
 db.sequelize.sync().then(() => {
   app.listen(port, () => {
