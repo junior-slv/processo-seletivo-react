@@ -1,5 +1,6 @@
 import { Model } from "sequelize";
-
+import bcrypt from 'bcrypt';
+import { HookReturn } from "sequelize/types/hooks";
 interface UserAttributes{
   id: number,
   userLogin: string,
@@ -25,6 +26,12 @@ module.exports = (sequelize: any, DataTypes: any) => {
       // define association here
 
     }
+    static async hashPassword(user: User): Promise<void> {
+      const saltRounds = 10;
+      if (user.changed('userPassword')) {
+        user.userPassword = await bcrypt.hash(user.userPassword, saltRounds);
+      }
+    }
   }
   User.init(
     {
@@ -48,5 +55,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
       modelName: 'User',
     }
   );
+  User.beforeSave(User.hashPassword);
+  
   return User;
 };
