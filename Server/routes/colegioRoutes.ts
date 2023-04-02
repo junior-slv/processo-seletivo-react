@@ -9,7 +9,7 @@ colegioRouter.get('/:id', colegioController.getColegio)
 
 colegioRouter.put('/:id', colegioController.updateColegio)
 
-colegioRouter.delete(':id', colegioController.deleteColegio)
+colegioRouter.delete('/:id', colegioController.deleteColegio)
 
 module.exports = colegioRouter;
 

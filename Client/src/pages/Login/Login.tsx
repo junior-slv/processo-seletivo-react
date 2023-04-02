@@ -2,35 +2,35 @@ import React, { useState } from "react";
 import "./Login.css";
 import LoginInput, { user } from "../../components/Login/EmailInput";
 import PasswordInput, { password } from "../../components/Login/PasswordInput";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 const url = "http://localhost:3001/api/users/login";
 export let isAuth = false;
 export let token = "";
 
-const sendLogin = () => {
-  axios
-    .post(url, {
-      userLogin: `${user}`,
-      userPassword: `${password}`,
-    })
-    .then((res) => {
-      let token = res.data.token;
-      // Defina o estado do token e autenticação
-      isAuth = true;
-      console.log(res.data);
-      console.log(isAuth);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
 
-  // Verifique o token antes de cada solicitação usando um interceptor do Axios
-};
 
 const Login = () => {
+  const navigate = useNavigate();
   const [themeToggle, setThemeToggle] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const sendLogin = () => {
+    axios
+      .post(url, {
+        userLogin: `${user}`,
+        userPassword: `${password}`,
+      })
+      .then((res) => {
+        let token = res.data.token;
+        isAuth = true;
+        navigate('/dash');
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  
+  };
 
   return (
     <div className={themeToggle ? "login-container-dark" : "login-container"}>
@@ -49,9 +49,7 @@ const Login = () => {
           <PasswordInput />
         </div>
         <div className="login-button">
-          <Link to="/dash">
             <input onClick={sendLogin} type="button" value="ENVIAR >" />
-          </Link>
         </div>
 
         <i

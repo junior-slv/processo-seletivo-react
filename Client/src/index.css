@@ -5,6 +5,9 @@
   text-decoration: none;
   list-style: none;
 }
+.bx{
+  cursor: pointer;
+}
 .flex-center{
   display: flex;
   align-items: center;
