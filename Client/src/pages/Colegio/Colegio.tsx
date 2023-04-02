@@ -114,7 +114,7 @@ const Colegio = () => {
                 <Td>{item.simbolo}</Td>
                 <Td>
                   <span>
-                    <i className="bx bx-edit"></i>
+                    <i onClick={isOpen} className="bx bx-edit"></i>
                   </span>
                   <span>
                     <i className="bx bx-trash"></i>
