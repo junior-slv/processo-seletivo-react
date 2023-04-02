@@ -34,7 +34,7 @@ import {
   AlertTitle,
   useToast,
 } from "@chakra-ui/react";
-let id: number, nome: string, cidade: string, estado: string, simbolo: string;
+let id: number;
 const postUrl = "http://localhost:3001/api/colegios";
 interface Colegio {
   id: number;

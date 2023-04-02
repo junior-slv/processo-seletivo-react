@@ -5,7 +5,7 @@ interface SalaAttributes{
   nome: string,
   capacidadeMesas: number,
   bloqueada: Boolean,
-  professores: String,
+  professores: String[],
   gradeAulas: string,
   protocolo: string
 }
@@ -23,7 +23,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
     nome!: string;
     capacidadeMesas!: number;
     bloqueada!: Boolean;
-    professores!: String;
+    professores!: String[];
     gradeAulas!: string;
     protocolo!: string
 
@@ -56,15 +56,15 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       professores: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.ARRAY(DataTypes.STRING(128)),
         allowNull: false,
       },
       gradeAulas: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(5000),
         allowNull: false,
       },
       protocolo: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING,
         allowNull: false,
       }
     },

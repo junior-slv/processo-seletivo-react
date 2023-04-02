@@ -26,7 +26,7 @@ module.exports = {
         allowNull: false,
       },
       gradeAulas: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(5000),
         allowNull: false,
       },
       protocolo: {

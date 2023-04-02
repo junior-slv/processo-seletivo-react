@@ -1,12 +1,21 @@
 import express from "express";
+const multer = require('multer');
 const app = express();
 const port = process.env.PORT || 3001;
 const cors = require('cors')
 import db from "./models";
+import path from "path";
 var corsOptions = {
     origin: "http://127.0.0.1:5173"
 }
 const TIMEOUT = 10 * 60 * 1000;
+
+export const upload = multer({dest: 'uploads/'});
+
+
+
+
+
 app.set('server.timeout', TIMEOUT);
 //middleware
 app.use(cors(corsOptions))
