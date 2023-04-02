@@ -10,6 +10,6 @@ salaRouter.get("/:id", salaController.getSala);
 
 salaRouter.put("/:id", salaController.updateSala);
 
-salaRouter.delete(":id", salaController.deleteSala);
+salaRouter.delete("/:id", salaController.deleteSala);
 
 module.exports = salaRouter;

@@ -48,7 +48,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         unique: true,
       },
       capacidadeMesas: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(128),
         allowNull: false,
       },
       bloqueada: {

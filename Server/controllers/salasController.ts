@@ -5,6 +5,7 @@ const Sala: any = db.salas;
 
 //adicionar sala
 const addSala = async (req: any, res: any) => {
+  try {
   let info = {
     nome: req.body.nome,
     capacidadeMesas: req.body.capacidadeMesas,
@@ -13,8 +14,13 @@ const addSala = async (req: any, res: any) => {
     gradeAulas: req.body.gradeAulas,
     protocolo: req.body.protocolo,
   };
+  
   const sala = await db.Sala.create(info);
   res.status(200).send(sala);
+} catch (ex) {
+  console.error(ex);
+  res.status(412);
+}
 };
 //mostrar todos os colegios
 const getAllSalas = async (req: any, res: any) => {
