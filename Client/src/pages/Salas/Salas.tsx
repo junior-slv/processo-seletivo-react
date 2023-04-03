@@ -38,7 +38,6 @@ interface Sala {
   nome: string;
   capacidadeMesas: string;
   bloqueada: Boolean;
-  professores: { nome: string }[]; 
   gradeAulas: string;
   protocolo: Buffer;
 }
@@ -52,7 +51,6 @@ const Salas = () => {
   const [gradeAulas, setGradeAulas] = useState("");
   const [protocolo, setProtocolo] = useState("");
   const [operation, setOperation] = useState("");
-  const [professores, setProfessores] = useState<Sala[]>([]);
   const [selectedValue, setSelectedValue] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -103,7 +101,6 @@ const Salas = () => {
       setBloqueada(selectedValue === "1" ? false : true);
       setGradeAulas("");
       setProtocolo("");
-      setProfessores([]);
       onClose();
       fetchSalas();
       toast({
@@ -133,9 +130,7 @@ const Salas = () => {
         capacidadeMesas,
         bloqueada,
         gradeAulas,
-        protocolo,
-        professores: professores.map((professor) => ({ nome: professor })),
-
+        protocolo
       });
       const novaSala = response.data;
       setDados([...dados, novaSala]);
@@ -144,7 +139,6 @@ const Salas = () => {
       setBloqueada(selectedValue === "1" ? false : true);
       setGradeAulas("");
       setProtocolo("");
-      setProfessores([]);
       onClose();
       toast({
         title: "Sucesso!",
@@ -248,7 +242,6 @@ const Salas = () => {
                         setBloqueada(selectedValue === "1" ? false : true);
                         setGradeAulas(sala.gradeAulas);
                         setProtocolo("a");
-                        setProfessores([]);
                         editOnOpen();
                       }}
                       colorScheme="blue"
@@ -330,7 +323,7 @@ const Salas = () => {
                   </RadioGroup>
                 </Flex>
 
-                <Flex>
+                {/* <Flex>
                   <Text
                     display="flex"
                     alignItems="center"
@@ -344,7 +337,7 @@ const Salas = () => {
                     name=""
                     value={professores.join(',')}
                     onChange={(e) => setProfessores([])}              />
-                    </Flex>
+                    </Flex> */}
 
                 <Flex>
                   <Text

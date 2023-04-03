@@ -51,7 +51,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       simbolo: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(255),
         allowNull: false,
       },
     },

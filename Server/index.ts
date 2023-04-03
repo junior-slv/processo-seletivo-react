@@ -10,7 +10,7 @@ var corsOptions = {
 }
 const TIMEOUT = 10 * 60 * 1000;
 
-export const upload = multer({dest: 'uploads/'});
+export const upload = multer({ dest: 'uploads/' });
 
 
 

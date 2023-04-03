@@ -5,14 +5,19 @@ const Colegio: any = db.colegios;
 
 //adicionar colegio
 const addColegio = async (req: any, res: any) => {
+  try { 
   let info = {
     nome: req.body.nome,
     estado: req.body.estado,
     cidade: req.body.cidade,
-    simbolo: req.body.simbolo,
+    simbolo: req.file.filename,
   };
   const colegio = await db.Colegio.create(info);
   res.status(200).send(colegio);
+} catch (ex) {
+  console.error(ex);
+  res.status(412);
+}
 };
 //mostrar todos os colegios
 const getAllColegios = async (req: any, res: any) => {

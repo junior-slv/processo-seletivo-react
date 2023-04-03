@@ -24,7 +24,7 @@ const Login = () => {
       .then((res) => {
         let token = res.data.token;
         isAuth = true;
-        navigate('/dash');
+        navigate('/dashboard');
       })
       .catch(function (error) {
         console.log(error);

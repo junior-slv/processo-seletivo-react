@@ -1,7 +1,9 @@
+import { upload } from "..";
+
 const colegioController =  require('../controllers/colegioController');
 const colegioRouter = require('express').Router();
 
-colegioRouter.post('/addcolegio', colegioController.addColegio)
+colegioRouter.post('/addcolegio', upload.single('image'),colegioController.addColegio)
 
 colegioRouter.get('/allcolegios', colegioController.getAllColegios)
 

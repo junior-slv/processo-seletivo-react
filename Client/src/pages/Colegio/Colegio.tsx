@@ -41,7 +41,7 @@ interface Colegio {
   nome: string;
   estado: string;
   cidade: string;
-  simbolo: string;
+  simbolo: File;
 }
 
 const Colegio = () => {
@@ -50,7 +50,7 @@ const Colegio = () => {
   const [nome, setNome] = useState("");
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("");
-  const [simbolo, setSimbolo] = useState("");
+  const [simbolo, setSimbolo] = useState<File | null>(null);
   const [operation, setOperation] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -89,7 +89,7 @@ const Colegio = () => {
       setNome("");
       setCidade("");
       setEstado("");
-      setSimbolo("");
+      setSimbolo(null);
       setFormToggle(false);
       onClose();
       toast({
@@ -119,6 +119,9 @@ const Colegio = () => {
         cidade,
         estado,
         simbolo,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
       const colegioEditado = response.data;
       setDados(
@@ -129,7 +132,7 @@ const Colegio = () => {
       setNome("");
       setCidade("");
       setEstado("");
-      setSimbolo("");
+      setSimbolo(null);
       onClose();
       fetchColegios();
       toast({
@@ -179,7 +182,6 @@ const Colegio = () => {
   };
 
   return (
-    
     <div className="colegio-container">
       <Sidebar />
       <div className="colegio-content">
@@ -211,31 +213,38 @@ const Colegio = () => {
                 <Td>{item.nome}</Td>
                 <Td>{item.cidade}</Td>
                 <Td>{item.estado}</Td>
-                <Td>{item.simbolo}</Td>
+                <td>
+                  {item.simbolo && (
+                    <img
+                      src={`../../../../Server/uploads/${item.id}/${item.simbolo}.png`}
+                      width="50"
+                    />
+                  )}
+                </td>
                 <Td>
-              <ButtonGroup>
-                <Button
-                  onClick={() => {
-                    id = item.id;
-                    setNome(item.nome);
-                    setCidade(item.cidade);
-                    setEstado(item.estado);
-                    setSimbolo(item.simbolo);
-                    editOnOpen();
-                  }}
-                  colorScheme="blue"
-                  size="sm"
-                >
-                  Editar
-                </Button>
-                <Button
-                  onClick={() => removerColegio(item.id)}
-                  colorScheme="red"
-                  size="sm"
-                >
-                  Remover
-                </Button>
-              </ButtonGroup>
+                  <ButtonGroup>
+                    <Button
+                      onClick={() => {
+                        id = item.id;
+                        setNome(item.nome);
+                        setCidade(item.cidade);
+                        setEstado(item.estado);
+                        setSimbolo(item.simbolo);
+                        editOnOpen();
+                      }}
+                      colorScheme="blue"
+                      size="sm"
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      onClick={() => removerColegio(item.id)}
+                      colorScheme="red"
+                      size="sm"
+                    >
+                      Remover
+                    </Button>
+                  </ButtonGroup>
                 </Td>
               </Tr>
             ))}
@@ -307,12 +316,12 @@ const Colegio = () => {
                   >
                     Simbolo
                   </Text>
-                  <Input
-                    type="text"
-                    name=""
+                  {/* <Input
+                    type="file"
+                    name="image"
                     value={simbolo}
-                    onChange={(e) => setSimbolo(e.target.value)}
-                  />
+                    onChange={(e) => setSimbolo(e.target.files[0])}
+                  /> */}
                 </Flex>
               </div>
             </ModalBody>
@@ -324,7 +333,9 @@ const Colegio = () => {
                 mr={3}
                 onClick={(e) => {
                   e.preventDefault();
-                  operation === "Adicionar" ? criarColegio() : editarColegio(id);
+                  operation === "Adicionar"
+                    ? criarColegio()
+                    : editarColegio(id);
                 }}
               >
                 {operation}
