@@ -21,10 +21,6 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         allowNull: false,
       },
-      professores: {
-        type: DataTypes.STRING(128),
-        allowNull: false,
-      },
       gradeAulas: {
         type: DataTypes.STRING(5000),
         allowNull: false,

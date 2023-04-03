@@ -10,7 +10,6 @@ const addSala = async (req: any, res: any) => {
     nome: req.body.nome,
     capacidadeMesas: req.body.capacidadeMesas,
     bloqueada: req.body.bloqueada,
-    professores: req.body.professores,
     gradeAulas: req.body.gradeAulas,
     protocolo: req.body.protocolo,
   };

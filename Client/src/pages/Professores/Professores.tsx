@@ -35,28 +35,27 @@ import {
   useToast,
 } from "@chakra-ui/react";
 let id: number;
-const postUrl = "http://localhost:3001/api/colegios";
-interface Colegio {
+const postUrl = "http://localhost:3001/api/professor";
+interface Professor {
   id: number;
   nome: string;
-  estado: string;
-  cidade: string;
-  simbolo: string;
+  email: string;
+  idade: string;
+
 }
 
 const Professores = () => {
-  const [dados, setDados] = useState<Colegio[]>([]);
+  const [dados, setDados] = useState<Professor[]>([]);
   const [formToggle, setFormToggle] = useState(false);
   const [nome, setNome] = useState("");
-  const [cidade, setCidade] = useState("");
-  const [estado, setEstado] = useState("");
-  const [simbolo, setSimbolo] = useState("");
+  const [email, setEmail] = useState("");
+  const [idade, setIdade] = useState("");
   const [operation, setOperation] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
   useEffect(() => {
-    fetchColegios();
+    fetchProfessores();
   }, []);
   const addOnOpen = () => {
     onOpen();
@@ -66,9 +65,9 @@ const Professores = () => {
     onOpen();
     setOperation("Editar");
   };
-  const fetchColegios = () => {
+  const fetchProfessores = () => {
     axios
-      .get<Colegio[]>(`${postUrl}/allcolegios`)
+      .get<Professor[]>(`${postUrl}/allprofessor`)
       .then((response) => {
         setDados(response.data);
       })
@@ -76,25 +75,22 @@ const Professores = () => {
         console.log(error);
       });
   };
-  const criarColegio = async () => {
+  const criarProfessor = async () => {
     try {
-      const response = await axios.post(`${postUrl}/addcolegio`, {
+      const response = await axios.post(`${postUrl}/addprofessor`, {
         nome,
-        cidade,
-        estado,
-        simbolo,
+        email,
+        idade
       });
-      const novoColegio = response.data;
-      setDados([...dados, novoColegio]);
+      const novoProfessor = response.data;
+      setDados([...dados, novoProfessor]);
       setNome("");
-      setCidade("");
-      setEstado("");
-      setSimbolo("");
-      setFormToggle(false);
+      setEmail("");
+      setIdade("");
       onClose();
       toast({
         title: "Sucesso!",
-        description: "Colégio adicionado com sucesso!",
+        description: "Professor adicionado com sucesso!",
         status: "success",
         position: "bottom-right",
         duration: 5000,
@@ -112,29 +108,27 @@ const Professores = () => {
       });
     }
   };
-  const editarColegio = async (id: number) => {
+  const editarProfessor = async (id: number) => {
     try {
       const response = await axios.put(`${postUrl}/${id}`, {
         nome,
-        cidade,
-        estado,
-        simbolo,
+        email,
+        idade
       });
-      const colegioEditado = response.data;
+      const professorEditado = response.data;
       setDados(
-        dados.map((colegio) => {
-          return colegio.id === colegioEditado.id ? colegioEditado : colegio;
+        dados.map((professor) => {
+          return professor.id === professorEditado.id ? professorEditado : professor;
         })
       );
       setNome("");
-      setCidade("");
-      setEstado("");
-      setSimbolo("");
+      setEmail("");
+      setIdade("");
       onClose();
-      fetchColegios();
+      fetchProfessores();
       toast({
         title: "Sucesso!",
-        description: "Colégio editado com sucesso!",
+        description: "Professor editado com sucesso!",
         status: "success",
         position: "bottom-right",
         duration: 5000,
@@ -153,13 +147,13 @@ const Professores = () => {
     }
   };
 
-  const removerColegio = async (id: number) => {
+  const removerProfessor = async (id: number) => {
     try {
       await axios.delete(`${postUrl}/${id}`);
       setDados(dados.filter((item) => item.id !== id));
       toast({
         title: "Sucesso!",
-        description: "Colégio removido com sucesso!",
+        description: "Professor removido com sucesso!",
         status: "success",
         position: "bottom-right",
         duration: 5000,
@@ -180,17 +174,17 @@ const Professores = () => {
 
   return (
     
-    <div className="colegio-container">
+    <div className="professor-container">
       <Sidebar />
-      <div className="colegio-content">
+      <div className="professor-content">
         <Flex minWidth="max-content" alignItems="center" gap="2" padding="1rem">
           <Box p="2">
-            <Heading size="md">Gerenciador de Colégios</Heading>
+            <Heading size="md">Gerenciador de Professores</Heading>
           </Box>
           <Spacer />
           <ButtonGroup gap="2">
             <Button onClick={addOnOpen} colorScheme="green">
-              Adicionar usuário
+              Adicionar professor
             </Button>
           </ButtonGroup>
         </Flex>
@@ -198,29 +192,25 @@ const Professores = () => {
         <Table variant="striped" colorScheme="blue">
           <Thead>
             <Tr>
-              <Th>Colégio</Th>
-              <Th>Cidade</Th>
-              <Th>Estado</Th>
-              <Th>Símbolo</Th>
-              <Th>Ações</Th>
+              <Th>Professor</Th>
+              <Th>Email</Th>
+              <Th>Idade</Th>
             </Tr>
           </Thead>
           <Tbody>
             {dados.map((item) => (
               <Tr key={item.id}>
                 <Td>{item.nome}</Td>
-                <Td>{item.cidade}</Td>
-                <Td>{item.estado}</Td>
-                <Td>{item.simbolo}</Td>
+                <Td>{item.email}</Td>
+                <Td>{item.idade}</Td>
                 <Td>
               <ButtonGroup>
                 <Button
                   onClick={() => {
                     id = item.id;
                     setNome(item.nome);
-                    setCidade(item.cidade);
-                    setEstado(item.estado);
-                    setSimbolo(item.simbolo);
+                    setEmail(item.email);
+                    setIdade(item.idade);
                     editOnOpen();
                   }}
                   colorScheme="blue"
@@ -229,7 +219,7 @@ const Professores = () => {
                   Editar
                 </Button>
                 <Button
-                  onClick={() => removerColegio(item.id)}
+                  onClick={() => removerProfessor(item.id)}
                   colorScheme="red"
                   size="sm"
                 >
@@ -244,7 +234,7 @@ const Professores = () => {
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>{operation} colégio</ModalHeader>
+            <ModalHeader>{operation} professor</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <div>
@@ -272,13 +262,13 @@ const Professores = () => {
                     justifyContent="center"
                     padding="1rem"
                   >
-                    Cidade
+                    Email
                   </Text>
                   <Input
                     type="text"
                     name=""
-                    value={cidade}
-                    onChange={(e) => setCidade(e.target.value)}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </Flex>
                 <Flex>
@@ -288,30 +278,13 @@ const Professores = () => {
                     justifyContent="center"
                     padding="1rem"
                   >
-                    Estado
+                    Idade
                   </Text>
                   <Input
                     type="text"
                     name=""
-                    value={estado}
-                    onChange={(e) => setEstado(e.target.value)}
-                  />
-                </Flex>
-
-                <Flex>
-                  <Text
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    padding="1rem"
-                  >
-                    Simbolo
-                  </Text>
-                  <Input
-                    type="text"
-                    name=""
-                    value={simbolo}
-                    onChange={(e) => setSimbolo(e.target.value)}
+                    value={idade}
+                    onChange={(e) => setIdade(e.target.value)}
                   />
                 </Flex>
               </div>
@@ -324,7 +297,7 @@ const Professores = () => {
                 mr={3}
                 onClick={(e) => {
                   e.preventDefault();
-                  operation === "Adicionar" ? criarColegio() : editarColegio(id);
+                  operation === "Adicionar" ? criarProfessor() : editarProfessor(id);
                 }}
               >
                 {operation}

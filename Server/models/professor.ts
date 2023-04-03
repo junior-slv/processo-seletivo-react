@@ -1,37 +1,29 @@
 import { Model } from "sequelize";
 
-interface ColegioAttributes{
+interface ProfessorAttributes {
   id: number,
-  nome:string,
-  estado:string,
-  cidade:string,
-  simbolo:string,
-  
+  nome: string,
+  email: string,
+  idade: number,
 }
 
-
 module.exports = (sequelize: any, DataTypes: any) => {
-  class Colegio extends Model<ColegioAttributes> 
-  implements ColegioAttributes{
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class Professor extends Model<ProfessorAttributes>
+  implements ProfessorAttributes{
     id!: number;
-    nome!:string;
-    estado!:string;
-    cidade!:string;
-    simbolo!:string;
+    nome!: string;
+    email!: string;
+    idade!: number;
+    salario!: number;
 
     readonly createdAt!: Date;
     readonly updatedAt!: Date;
+
     static associate(models: any) {
       // define association here
-
     }
   }
-  Colegio.init(
+  Professor.init(
     {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -42,23 +34,20 @@ module.exports = (sequelize: any, DataTypes: any) => {
         type: DataTypes.STRING(128),
         allowNull: false,
       },
-      estado: {
+      email: {
         type: DataTypes.STRING(128),
         allowNull: false,
+        unique: true,
       },
-      cidade: {
+      idade: {
         type: DataTypes.STRING(128),
         allowNull: false,
-      },
-      simbolo: {
-        type: DataTypes.STRING(255),
-        allowNull: true,
       },
     },
     {
       sequelize,
-      modelName: 'Colegio',
+      modelName: 'Professor',
     }
   );
-  return Colegio;
+  return Professor;
 };

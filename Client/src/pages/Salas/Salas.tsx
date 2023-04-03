@@ -28,10 +28,16 @@ import {
   Radio,
   RadioGroup,
   Stack,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import operation from "antd/es/transfer/operation";
+import { fetchProfessores } from "../Professores/Professores";
 let id: number;
 const baseURL = "http://localhost:3001/api/salas";
+const postUrl = "http://localhost:3001/api/professor";
 
 interface Sala {
   id: number;
@@ -41,9 +47,16 @@ interface Sala {
   gradeAulas: string;
   protocolo: Buffer;
 }
+interface Professor {
+  id: number;
+  nome: string;
+  email: string;
+  idade: string;
+}
 
 const Salas = () => {
   const [dados, setDados] = useState<Sala[]>([]);
+  const [professores, setProfessores] = useState<Professor[]>([]);
   const [file, setFile] = useState<File | null>(null);
   const [nome, setNome] = useState("");
   const [capacidadeMesas, setCapacidadeMesas] = useState("");
@@ -57,11 +70,21 @@ const Salas = () => {
   const toast = useToast();
   useEffect(() => {
     fetchSalas();
+    fetchProfessores();
   }, []);
+  const fetchProfessores = () => {
+    axios
+      .get<Professor[]>(`${postUrl}/allprofessor`)
+      .then((response) => {
+        setProfessores(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   function handleDisponibilidade(value: React.SetStateAction<string>) {
     setSelectedValue(value);
     console.log(selectedValue);
-    
   }
   const fetchSalas = () => {
     axios
@@ -130,7 +153,7 @@ const Salas = () => {
         capacidadeMesas,
         bloqueada,
         gradeAulas,
-        protocolo
+        protocolo,
       });
       const novaSala = response.data;
       setDados([...dados, novaSala]);
@@ -215,11 +238,20 @@ const Salas = () => {
                     <Text fontWeight="bold" fontSize="lg">
                       {sala.capacidadeMesas}
                     </Text>
-                    <Text fontSize="sm" color="gray.500">
+                    {/* <Text fontSize="sm" color="gray.500">
                       Professores
-                    </Text>
+                    </Text> */}
                     <Text fontWeight="bold" fontSize="lg">
-                      {/* {sala.professores} */}
+                      <Menu>
+                        <MenuButton as={Button}>Professores</MenuButton>
+                        <MenuList>
+                          {professores.map((professor) => (
+                            <MenuItem key={professor.id}>
+                              {professor.nome}
+                            </MenuItem>
+                          ))}
+                        </MenuList>
+                      </Menu>
                     </Text>
                   </GridItem>
                   <GridItem>
@@ -311,7 +343,14 @@ const Salas = () => {
                   >
                     Disponibilidade
                   </Text>
-                  <RadioGroup  value={selectedValue} onChange={(value) => setSelectedValue(value)} display="flex" alignItems="center" justifyContent="center" defaultValue="1">
+                  <RadioGroup
+                    value={selectedValue}
+                    onChange={(value) => setSelectedValue(value)}
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    defaultValue="1"
+                  >
                     <Stack spacing={5} direction="row">
                       <Radio colorScheme="red" value="1">
                         Bloqueada

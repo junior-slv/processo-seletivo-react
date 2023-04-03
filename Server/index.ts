@@ -34,6 +34,8 @@ const colegioRouter = require('./routes/colegioRoutes')
 app.use('/api/colegios', colegioRouter)
 const salaRouter = require('./routes/salasRoutes')
 app.use('/api/salas', salaRouter)
+const professorRouter = require('./routes/professorRoutes')
+app.use('/api/professor', professorRouter)
 
 db.sequelize.sync().then(() => {
   app.listen(port, () => {

@@ -10,7 +10,7 @@ const addColegio = async (req: any, res: any) => {
     nome: req.body.nome,
     estado: req.body.estado,
     cidade: req.body.cidade,
-    simbolo: req.file.filename,
+    simbolo: req.file.filename
   };
   const colegio = await db.Colegio.create(info);
   res.status(200).send(colegio);
