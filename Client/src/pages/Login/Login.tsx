@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 const url = "http://localhost:3001/api/users/login";
 export let isAuth = false;
+export let isAdmin = false;
 export let token = "";
 
 
@@ -23,6 +24,9 @@ const Login = () => {
       })
       .then((res) => {
         let token = res.data.token;
+        if (user === "admin"){
+          isAdmin = true;
+        }
         isAuth = true;
         navigate('/dashboard');
       })

@@ -207,7 +207,6 @@ const Salas = () => {
       });
     }
   };
-  const nomesToLista = () => {};
   return (
     <div className="salas-container">
       <Sidebar />
@@ -256,7 +255,7 @@ const Salas = () => {
                   </GridItem>
                   <GridItem>
                     <Text>
-                      {sala.bloqueada ? (
+                      {sala.bloqueada  ? (
                         <Text fontWeight="bold" fontSize="lg" color="red">
                           Ocupada
                         </Text>
@@ -334,7 +333,7 @@ const Salas = () => {
                     onChange={(e) => setCapacidadeMesas(e.target.value)}
                   />
                 </Flex>
-                <Flex display={operation === "Editar" ? "flex" : "none"}>
+                <Flex>
                   <Text
                     display="flex"
                     alignItems="center"
@@ -349,7 +348,6 @@ const Salas = () => {
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    defaultValue="1"
                   >
                     <Stack spacing={5} direction="row">
                       <Radio colorScheme="red" value="1">
@@ -361,23 +359,6 @@ const Salas = () => {
                     </Stack>
                   </RadioGroup>
                 </Flex>
-
-                {/* <Flex>
-                  <Text
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    padding="1rem"
-                  >
-                    Professores
-                  </Text>
-                  <Input
-                    type=""
-                    name=""
-                    value={professores.join(',')}
-                    onChange={(e) => setProfessores([])}              />
-                    </Flex> */}
-
                 <Flex>
                   <Text
                     display="flex"
