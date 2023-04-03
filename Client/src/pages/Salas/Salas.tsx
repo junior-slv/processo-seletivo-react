@@ -38,7 +38,7 @@ interface Sala {
   nome: string;
   capacidadeMesas: string;
   bloqueada: Boolean;
-  professores: { nome: string }[];
+  professores: { nome: string }[]; 
   gradeAulas: string;
   protocolo: Buffer;
 }
@@ -63,6 +63,7 @@ const Salas = () => {
   function handleDisponibilidade(value: React.SetStateAction<string>) {
     setSelectedValue(value);
     console.log(selectedValue);
+    
   }
   const fetchSalas = () => {
     axios
@@ -134,6 +135,7 @@ const Salas = () => {
         gradeAulas,
         protocolo,
         professores: professores.map((professor) => ({ nome: professor })),
+
       });
       const novaSala = response.data;
       setDados([...dados, novaSala]);
@@ -316,14 +318,7 @@ const Salas = () => {
                   >
                     Disponibilidade
                   </Text>
-                  <RadioGroup
-                    value={selectedValue}
-                    onChange={(value) => setSelectedValue(value)}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    defaultValue="1"
-                  >
+                  <RadioGroup  value={selectedValue} onChange={(value) => setSelectedValue(value)} display="flex" alignItems="center" justifyContent="center" defaultValue="1">
                     <Stack spacing={5} direction="row">
                       <Radio colorScheme="red" value="1">
                         Bloqueada
@@ -347,10 +342,9 @@ const Salas = () => {
                   <Input
                     type=""
                     name=""
-                    value={professores.join(",")}
-                    onChange={(e) => setProfessores([])}
-                  />
-                </Flex>
+                    value={professores.join(',')}
+                    onChange={(e) => setProfessores([])}              />
+                    </Flex>
 
                 <Flex>
                   <Text
