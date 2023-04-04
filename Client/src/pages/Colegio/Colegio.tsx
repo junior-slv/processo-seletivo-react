@@ -37,9 +37,7 @@ import {
   Img,
 } from "@chakra-ui/react";
 let id: number;
-  let imageFile: File | undefined;
-  let fileName: string | undefined;
-const postUrl = "http://localhost:3001/api/colegios";
+const baseURL = "http://localhost:3001/api/colegios";
 interface Colegio {
   id: number;
   nome: string;
@@ -58,15 +56,7 @@ const Colegio = () => {
   const [operation, setOperation] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-
   const toast = useToast();
-
-  const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-    imageFile = event.target.files && event.target.files[0];
-    fileName = event.target.files[0].name;
-    console.log(fileName);
-    
-  }, []);
 
   useEffect(() => {
     fetchColegios();
@@ -81,7 +71,7 @@ const Colegio = () => {
   };
   const fetchColegios = () => {
     axios
-      .get<Colegio[]>(`${postUrl}/allcolegios`)
+      .get<Colegio[]>(`${baseURL}/allcolegios`)
       .then((response) => {
         setDados(response.data);
       })
@@ -91,7 +81,7 @@ const Colegio = () => {
   };
   const criarColegio = async () => {
     try {
-      const response = await axios.post(`${postUrl}/addcolegio`, {
+      const response = await axios.post(`${baseURL}/addcolegio`, {
         nome,
         cidade,
         estado,
@@ -127,7 +117,7 @@ const Colegio = () => {
   };
   const editarColegio = async (id: number) => {
     try {
-      const response = await axios.put(`${postUrl}/${id}`, {
+      const response = await axios.put(`${baseURL}/${id}`, {
         nome,
         cidade,
         estado,
@@ -172,7 +162,7 @@ const Colegio = () => {
 
   const removerColegio = async (id: number) => {
     try {
-      await axios.delete(`${postUrl}/${id}`);
+      await axios.delete(`${baseURL}/${id}`);
       setDados(dados.filter((item) => item.id !== id));
       toast({
         title: "Sucesso!",
@@ -198,13 +188,16 @@ const Colegio = () => {
   const fileUpload = async () => {
     try {
       const formData = new FormData();
-      formData.append("file", selectedImage);
-
-      axios.post(`${postUrl}/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      if (selectedImage) {
+        formData.append("file", selectedImage);
+        axios.post(`${baseURL}/upload`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      } else {
+        console.log("Nenhuma imagem selecionada.");
+      }
 
       toast({
         title: "Sucesso!",
@@ -238,7 +231,7 @@ const Colegio = () => {
           <Spacer />
           <ButtonGroup gap="2">
             <Button onClick={addOnOpen} colorScheme="green">
-              Adicionar usuário
+              Adicionar colégio
             </Button>
           </ButtonGroup>
         </Flex>
@@ -365,14 +358,22 @@ const Colegio = () => {
                   <div>
                     <label htmlFor="image-uploader">Select an image:</label>
                     <Flex>
-                      <i onClick={(e) => setSelectedImage(e.target.files && e.target.files[0])} className="bx bx-box"></i>
+                      {/* <i onChange={(event: React.ChangeEvent<HTMLInputElement>) =>  className="bx bx-box"></i> */}
                     </Flex>
                     <Input
                       type="file"
                       id="image-uploader"
                       accept="image/*"
-                      onChange={(e) => setSimbolo(e.target.files[0].name)}
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        setSelectedImage(event.target.files?.[0] ?? null)
+                        const file = event.target.files?.[0] ?? null;
+                        setSelectedImage(file);
+                        if (file) {
+                          setSimbolo(file.name);
+                        }
+                      }}
                     />
+                    <button onClick={fileUpload}>ENVIAR</button>
                   </div>
                 </Flex>
               </div>
