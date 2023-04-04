@@ -1,8 +1,7 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import "./Colegio.css";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
-import icon from "../../assets/png.png"
 import {
   Button,
   Input,
@@ -36,7 +35,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 let id: number;
-let img: any;
 const postUrl = "http://localhost:3001/api/colegios";
 interface Colegio {
   id: number;
@@ -52,15 +50,10 @@ const Colegio = () => {
   const [nome, setNome] = useState("");
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("");
-  const [simbolo, setSimbolo] = useState<Colegio>(null);
+  const [simbolo, setSimbolo] = useState<File | null>(null);
   const [operation, setOperation] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-
-
-  const handleImg = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-    img = e.currentTarget.files[0];
-  }, []);
 
   useEffect(() => {
     fetchColegios();
@@ -96,7 +89,7 @@ const Colegio = () => {
       setNome("");
       setCidade("");
       setEstado("");
-      setSimbolo(img);
+      setSimbolo(null);
       setFormToggle(false);
       onClose();
       toast({
@@ -126,6 +119,9 @@ const Colegio = () => {
         cidade,
         estado,
         simbolo,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
       const colegioEditado = response.data;
       setDados(
@@ -189,6 +185,7 @@ const Colegio = () => {
     <div className="colegio-container">
       <Sidebar />
       <div className="colegio-content">
+        
         <Flex minWidth="max-content" alignItems="center" gap="2" padding="1rem">
           <Box p="2">
             <Heading size="md">Gerenciador de Colégios</Heading>
@@ -217,7 +214,14 @@ const Colegio = () => {
                 <Td>{item.nome}</Td>
                 <Td>{item.cidade}</Td>
                 <Td>{item.estado}</Td>
-                <Td widht="60px" height= "60px" size="sm"> <img src={simbolo} alt="" srcset="" /></Td>
+                <td>
+                  {item.simbolo && (
+                    <img
+                      src={`../../../../Server/uploads/${item.id}/${item.simbolo}.png`}
+                      width="50"
+                    />
+                  )}
+                </td>
                 <Td>
                   <ButtonGroup>
                     <Button
@@ -303,7 +307,6 @@ const Colegio = () => {
                     onChange={(e) => setEstado(e.target.value)}
                   />
                 </Flex>
-                
 
                 <Flex>
                   <Text
@@ -314,13 +317,12 @@ const Colegio = () => {
                   >
                     Simbolo
                   </Text>
-                  <Input
+                  {/* <Input
                     type="file"
                     name="image"
                     value={simbolo}
-                    onChange={handleImg}
-
-                  />
+                    onChange={(e) => setSimbolo(e.target.files[0])}
+                  /> */}
                 </Flex>
               </div>
             </ModalBody>

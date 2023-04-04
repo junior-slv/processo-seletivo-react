@@ -1,5 +1,3 @@
-import { upload } from "..";
-
 const professorController =  require('../controllers/professorController');
 const professorRouter = require('express').Router();
 

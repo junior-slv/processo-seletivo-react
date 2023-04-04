@@ -1,5 +1,6 @@
+import path from "path";
 import db from "../models";
-
+const multer = require('multer');
 
 const Colegio: any = db.colegios;
 
@@ -10,7 +11,7 @@ const addColegio = async (req: any, res: any) => {
     nome: req.body.nome,
     estado: req.body.estado,
     cidade: req.body.cidade,
-    simbolo: req.file.filename
+    simbolo: req.body.simbolo
   };
   const colegio = await db.Colegio.create(info);
   res.status(200).send(colegio);
@@ -46,10 +47,39 @@ const deleteColegio = async (req: any, res: any) => {
     res.status(200).send("Colégio removido!");
   };
 
-module.exports = {
+
+
+  const storage = multer.diskStorage({
+    destination: function (req:any, file:any, cb:any) {
+      cb(null, 'uploads/colegio/');
+    },
+    filename: async function (req:any, file:any, cb:any) {
+      const colegioId = req.params.colegioId; // ID do colégio
+      const fileExtension = path.extname(file.originalname);
+      cb(null, `${colegioId}${fileExtension}`);
+    }
+  });
+  
+  export const upload = multer({ storage: storage });
+  
+  function uploadSimbolo(req:any, res:any) {
+    try {
+      const colegioId = req.params.id; // ID do colégio
+      upload.single('file')(req, res, function(err:any) {
+        return res.status(200).send('Arquivo enviado com sucesso!');
+      });
+    } catch (ex) {
+      console.error(ex);
+      res.status(412);
+    }
+  };
+
+
+  module.exports = {
     addColegio,
     getAllColegios,
     getColegio,
     updateColegio,
     deleteColegio,
+    uploadSimbolo,
 }
