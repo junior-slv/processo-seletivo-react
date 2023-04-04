@@ -53,7 +53,6 @@ module.exports = (sequelize: any, DataTypes: any) => {
       simbolo: {
         type: DataTypes.STRING(255),
         allowNull: true,
-        defaultValue: "Doe",
       },
     },
     {

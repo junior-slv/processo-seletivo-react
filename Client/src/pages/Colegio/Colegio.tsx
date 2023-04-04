@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState, useCallback } from "react";
 import "./Colegio.css";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
@@ -37,6 +37,8 @@ import {
   Img,
 } from "@chakra-ui/react";
 let id: number;
+  let imageFile: File | undefined;
+  let fileName: string | undefined;
 const postUrl = "http://localhost:3001/api/colegios";
 interface Colegio {
   id: number;
@@ -56,13 +58,15 @@ const Colegio = () => {
   const [operation, setOperation] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const handleImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
-    const imageFile = event.target.files && event.target.files[0];
-    setSelectedImage(imageFile);
-    console.log(selectedImage);
-    
-  };
+
   const toast = useToast();
+
+  const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    imageFile = event.target.files && event.target.files[0];
+    fileName = event.target.files[0].name;
+    console.log(fileName);
+    
+  }, []);
 
   useEffect(() => {
     fetchColegios();
@@ -98,7 +102,7 @@ const Colegio = () => {
       setNome("");
       setCidade("");
       setEstado("");
-      setSimbolo("");
+      setSimbolo("")
       setFormToggle(false);
       onClose();
       toast({
@@ -141,9 +145,10 @@ const Colegio = () => {
       setNome("");
       setCidade("");
       setEstado("");
-      setSimbolo("");
+      setSimbolo("")
       onClose();
       fetchColegios();
+      fileUpload();
       toast({
         title: "Sucesso!",
         description: "Colégio editado com sucesso!",
@@ -192,11 +197,15 @@ const Colegio = () => {
 
   const fileUpload = async () => {
     try {
-      axios.post(`${postUrl}/upload`, selectedImage, {
+      const formData = new FormData();
+      formData.append("file", selectedImage);
+
+      axios.post(`${postUrl}/upload`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
+
       toast({
         title: "Sucesso!",
         description: "Colégio adicionado com sucesso!",
@@ -251,13 +260,12 @@ const Colegio = () => {
                 <Td>{item.cidade}</Td>
                 <Td>{item.estado}</Td>
                 <Td>
-                  {item.simbolo && (
-                    <Img
-                      src={`./../../../public/${item.simbolo}`}
-                      width="50px"
-                      borderRadius="50px"
-                    />
-                  )}
+                  {" "}
+                  <Img
+                    src={`http://localhost:3001/api/colegios/download/${item.simbolo}`}
+                    width="50px"
+                    borderRadius="50px"
+                  />
                 </Td>
                 <Td>
                   <ButtonGroup>
@@ -354,36 +362,17 @@ const Colegio = () => {
                   >
                     Simbolo
                   </Text>
-                  {/* <Input
-                    type="file"
-                    accept="image/*"
-                    name="image"
-                    value={simbolo}
-                    onChange={(e) => setSimbolo(e.target.files[0])}
-                  /> */}
                   <div>
                     <label htmlFor="image-uploader">Select an image:</label>
-                    <input
+                    <Flex>
+                      <i onClick={(e) => setSelectedImage(e.target.files && e.target.files[0])} className="bx bx-box"></i>
+                    </Flex>
+                    <Input
                       type="file"
                       id="image-uploader"
                       accept="image/*"
-                      onChange={(event) => {
-                        const imageFile = event.target.files && event.target.files[0];
-                        setSelectedImage(imageFile);
-                        fileUpload()
-                      }}
+                      onChange={(e) => setSimbolo(e.target.files[0].name)}
                     />
-                    {selectedImage && (
-                      <div>
-                        <p>Selected image: {selectedImage.name}</p>
-                        <Img
-                          src={URL.createObjectURL(selectedImage)}
-                          alt="Selected"
-                          width="50px"
-                          borderRadius="50px"
-                        />
-                      </div>
-                    )}
                   </div>
                 </Flex>
               </div>
