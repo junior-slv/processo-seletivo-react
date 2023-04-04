@@ -11,7 +11,7 @@ colegioRouter.put('/:id', colegioController.updateColegio)
 
 colegioRouter.delete('/:id', colegioController.deleteColegio)
 
-colegioRouter.post('/:id/upload/', colegioController.uploadSimbolo);
+colegioRouter.post('/upload', colegioController.uploadSimbolo);
 
 module.exports = colegioRouter;
 
