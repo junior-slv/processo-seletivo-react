@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import "./Colegio.css";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
+import img from "../../../../Server/uploads/colegio/img.png";
 import {
   Button,
   Input,
@@ -33,6 +34,7 @@ import {
   AlertIcon,
   AlertTitle,
   useToast,
+  Img,
 } from "@chakra-ui/react";
 let id: number;
 const postUrl = "http://localhost:3001/api/colegios";
@@ -41,7 +43,7 @@ interface Colegio {
   nome: string;
   estado: string;
   cidade: string;
-  simbolo: File;
+  simbolo: string;
 }
 
 const Colegio = () => {
@@ -50,9 +52,16 @@ const Colegio = () => {
   const [nome, setNome] = useState("");
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("");
-  const [simbolo, setSimbolo] = useState<File | null>(null);
+  const [simbolo, setSimbolo] = useState("");
   const [operation, setOperation] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const handleImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
+    const imageFile = event.target.files && event.target.files[0];
+    setSelectedImage(imageFile);
+    console.log(selectedImage);
+    
+  };
   const toast = useToast();
 
   useEffect(() => {
@@ -89,7 +98,7 @@ const Colegio = () => {
       setNome("");
       setCidade("");
       setEstado("");
-      setSimbolo(null);
+      setSimbolo("");
       setFormToggle(false);
       onClose();
       toast({
@@ -132,7 +141,7 @@ const Colegio = () => {
       setNome("");
       setCidade("");
       setEstado("");
-      setSimbolo(null);
+      setSimbolo("");
       onClose();
       fetchColegios();
       toast({
@@ -181,11 +190,38 @@ const Colegio = () => {
     }
   };
 
+  const fileUpload = async () => {
+    try {
+      axios.post(`${postUrl}/upload`, selectedImage, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      toast({
+        title: "Sucesso!",
+        description: "Colégio adicionado com sucesso!",
+        status: "success",
+        position: "bottom-right",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Erro!",
+        description: "Não foi possível realizar a requisição.",
+        status: "error",
+        position: "bottom-right",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <div className="colegio-container">
       <Sidebar />
       <div className="colegio-content">
-        
         <Flex minWidth="max-content" alignItems="center" gap="2" padding="1rem">
           <Box p="2">
             <Heading size="md">Gerenciador de Colégios</Heading>
@@ -214,14 +250,15 @@ const Colegio = () => {
                 <Td>{item.nome}</Td>
                 <Td>{item.cidade}</Td>
                 <Td>{item.estado}</Td>
-                <td>
+                <Td>
                   {item.simbolo && (
-                    <img
-                      src={`../../../../Server/uploads/${item.id}/${item.simbolo}.png`}
-                      width="50"
+                    <Img
+                      src={`./../../../public/${item.simbolo}`}
+                      width="50px"
+                      borderRadius="50px"
                     />
                   )}
-                </td>
+                </Td>
                 <Td>
                   <ButtonGroup>
                     <Button
@@ -319,10 +356,35 @@ const Colegio = () => {
                   </Text>
                   {/* <Input
                     type="file"
+                    accept="image/*"
                     name="image"
                     value={simbolo}
                     onChange={(e) => setSimbolo(e.target.files[0])}
                   /> */}
+                  <div>
+                    <label htmlFor="image-uploader">Select an image:</label>
+                    <input
+                      type="file"
+                      id="image-uploader"
+                      accept="image/*"
+                      onChange={(event) => {
+                        const imageFile = event.target.files && event.target.files[0];
+                        setSelectedImage(imageFile);
+                        fileUpload()
+                      }}
+                    />
+                    {selectedImage && (
+                      <div>
+                        <p>Selected image: {selectedImage.name}</p>
+                        <Img
+                          src={URL.createObjectURL(selectedImage)}
+                          alt="Selected"
+                          width="50px"
+                          borderRadius="50px"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </Flex>
               </div>
             </ModalBody>

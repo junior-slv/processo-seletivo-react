@@ -7,19 +7,25 @@ const Colegio: any = db.colegios;
 //adicionar colegio
 const addColegio = async (req: any, res: any) => {
   try { 
-  let info = {
-    nome: req.body.nome,
-    estado: req.body.estado,
-    cidade: req.body.cidade,
-    simbolo: req.body.simbolo
-  };
-  const colegio = await db.Colegio.create(info);
-  res.status(200).send(colegio);
-} catch (ex) {
-  console.error(ex);
-  res.status(412);
-}
+    let simbolo = req.body.simbolo;
+    if (simbolo) {
+      simbolo = path.basename(simbolo);
+    }
+
+    let info = {
+      nome: req.body.nome,
+      estado: req.body.estado,
+      cidade: req.body.cidade,
+      simbolo: simbolo
+    };
+    const colegio = await db.Colegio.create(info);
+    res.status(200).send(colegio);
+  } catch (ex) {
+    console.error(ex);
+    res.status(412);
+  }
 };
+
 //mostrar todos os colegios
 const getAllColegios = async (req: any, res: any) => {
   let colegios = await db.Colegio.findAll({});
@@ -64,19 +70,12 @@ const deleteColegio = async (req: any, res: any) => {
 
 
   function uploadSimbolo(req:any, res:any) {
-    try{
-      upload.single('file')(req, res, function(err:any) {
-        if (err) {
-          console.error(err);
-          return res.status(412).send('Erro ao enviar arquivo!');
-        }
-
-      })
-    } catch (ex) {
-      console.error(ex);
-      res.status(412);
-    }
-  ;
+    upload.single('file')(req, res, function(err:any) {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      return res.status(200).send('Arquivo enviado com sucesso!');
+    });
   }
 
 
