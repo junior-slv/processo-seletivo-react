@@ -66,8 +66,12 @@ const deleteColegio = async (req: any, res: any) => {
   function uploadSimbolo(req:any, res:any) {
     try{
       upload.single('file')(req, res, function(err:any) {
-        return res.status(200).send('Arquivo enviado com sucesso!');
-        })
+        if (err) {
+          console.error(err);
+          return res.status(412).send('Erro ao enviar arquivo!');
+        }
+
+      })
     } catch (ex) {
       console.error(ex);
       res.status(412);
