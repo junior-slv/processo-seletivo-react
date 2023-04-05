@@ -1,12 +1,37 @@
 import React, { useEffect, useState } from "react";
-import FileDownload from 'js-file-download';
+import FileDownload from "js-file-download";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
 import {
-  Card, CardBody, SimpleGrid, Grid, GridItem, Heading, Text, Button, Flex, Input,
-  Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
-  useDisclosure, useToast, Box, ButtonGroup, Spacer, Radio, RadioGroup, Stack, Menu,
-  MenuButton, MenuList, MenuItem
+  Card,
+  CardBody,
+  SimpleGrid,
+  Grid,
+  GridItem,
+  Heading,
+  Text,
+  Button,
+  Flex,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  useToast,
+  Box,
+  ButtonGroup,
+  Spacer,
+  Radio,
+  RadioGroup,
+  Stack,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import "./Salas.css";
 let id: number;
@@ -113,6 +138,9 @@ const Salas = () => {
       const response = await axios.put(`${baseURL}/${id}`, {
         nome,
         capacidadeMesas,
+        bloqueada,
+        gradeAulas,
+        protocolo,
       });
       const salaEditada = response.data;
       setDados(
@@ -164,7 +192,7 @@ const Salas = () => {
       setBloqueada(selectedValue === "1" ? false : true);
       setGradeAulas("");
       setProtocolo("");
-      fileUpload
+      fileUpload;
       onClose();
       toast({
         title: "Sucesso!",
@@ -242,7 +270,9 @@ const Salas = () => {
                     </Text>
                     <Text fontWeight="bold" fontSize="lg">
                       <Menu>
-                        <MenuButton as={Button}>Lista de Professores</MenuButton>
+                        <MenuButton as={Button}>
+                          Lista de Professores
+                        </MenuButton>
                         <MenuList>
                           {professores.map((professor) => (
                             <MenuItem key={professor.id}>
@@ -275,7 +305,7 @@ const Salas = () => {
                         id = sala.id;
                         setNome(sala.nome);
                         setCapacidadeMesas(sala.capacidadeMesas);
-                        setBloqueada(selectedValue === "1" ? false : true);
+                        setBloqueada(sala.bloqueada)
                         setGradeAulas(sala.gradeAulas);
                         setProtocolo("");
                         editOnOpen();
@@ -293,27 +323,35 @@ const Salas = () => {
                       Remover
                     </Button>
                     <Button
-                      colorScheme="yellow"
+                      onClick={(e) => {
+                        const imageSource = sala.gradeAulas;
+                        const filename = sala.nome;
+                        const link = document.createElement("a");
+                        link.download = filename;
+                        link.href = imageSource;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
+                      colorScheme="purple"
                       size="sm"
                     >
                       Grade de Aulas
                     </Button>
                     <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        axios({
-                          url:`http://localhost:3001/api/salas/download/${sala.protocolo}`,
-                          method: "GET",
-                          responseType: "blob",
-                        }).then((res) =>{
-                          FileDownload(res.data, `${sala.protocolo}`)
-                        })
-                      }}
-                      colorScheme="purple"
-                      size="sm"
-                    >
-                      Protocólo
-                    </Button>
+                    onClick={(e) =>{
+                      e.preventDefault();
+                      axios({
+                        url:`${baseURL}/download/${sala.protocolo}`,
+                        method: "GET",
+                        responseType: "blob"
+                      }).then((res) => {
+                        FileDownload(res.data, `${sala.protocolo}`)
+                      })
+                    }}
+                    colorScheme="yellow"
+                    size="sm"
+                    >Protocólo</Button>
                   </GridItem>
                 </Grid>
               </CardBody>
@@ -371,10 +409,14 @@ const Salas = () => {
                   </Text>
                   <RadioGroup
                     value={selectedValue}
-                    onChange={(value) => setSelectedValue(value)}
+                    onChange={(value) => {
+                      setSelectedValue(value)
+                      setBloqueada(value === "1" ? true : false)
+                    }}
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
+                    defaultValue="1"
                   >
                     <Stack spacing={5} direction="row">
                       <Radio colorScheme="red" value="1">
@@ -400,15 +442,19 @@ const Salas = () => {
                     id="image-uploader"
                     accept="image/*"
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      setFile(event.target.files?.[0] ?? null);
-                      const file = event.target.files?.[0] ?? null;
-                      setFile(file);
-                      if (file) {
-                        setProtocolo(file.name);
+                      const files = event.target.files;
+                      if (files && files[0]) {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(files[0]);
+                        reader.onload = () => {
+                          const base64String = reader.result?.toString();
+                          if (base64String) {
+                            setGradeAulas(base64String);
+                          }
+                        };
                       }
                     }}
                   />
-                  <Button onClick={fileUpload}>ENVIAR</Button>
                 </Flex>
                 <Flex>
                   <Text

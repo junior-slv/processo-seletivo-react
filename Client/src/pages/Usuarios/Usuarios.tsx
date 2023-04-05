@@ -104,42 +104,7 @@ const Usuarios = () => {
       });
     }
   };
-  const editarUsuário = async (id: number) => {
-    try {
-      const response = await axios.put(`${postUrl}/${id}`, {
-        userLogin,
-        userPassword
-      });
-      const userEditado = response.data;
-      setDados(
-        dados.map((user) => {
-          return user.id === userEditado.id ? userEditado : user;
-        })
-      );
-      setUserLogin("");
-      setUserPassword("");
-      onClose();
-      fetchUsuarios();
-      toast({
-        title: "Sucesso!",
-        description: "Usuário editado com sucesso!",
-        status: "success",
-        position: "bottom-right",
-        duration: 5000,
-        isClosable: true,
-      });
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Erro!",
-        description: "Não foi possível realizar a requisição.",
-        status: "error",
-        position: "bottom-right",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
-  };
+
 
   const removerUsuario = async (id: number) => {
     try {
@@ -154,7 +119,7 @@ const Usuarios = () => {
         isClosable: true,
       });
     } catch (error) {
-      console.error(error);
+      console.error(error); 
       toast({
         title: "Erro!",
         description: "Não foi possível realizar a requisição.",
@@ -193,23 +158,27 @@ const Usuarios = () => {
             {dados.map((item) => (
               <Tr key={item.id}>
                 <Td>{item.userLogin}</Td>
-                <Td>{item.userPassword}</Td>
                 <Td>
               <ButtonGroup>
-              <Button
-                  onClick={() => {
-                    id = item.id;
-                    setUserLogin(item.userLogin);
-                    setUserPassword(item.userPassword);
-                    editOnOpen();
-                  }}
-                  colorScheme="blue"
-                  size="sm"
-                >
-                  Editar
-                </Button>
                 <Button
-                  onClick={() => removerUsuario(item.id)}
+                  onClick={() => {
+                    try {
+                    if (item.userLogin === "admin"){
+                      toast({
+                        title: "Erro!",
+                        description: "Não é possível remover o usuário administrador!",
+                        status: "error",
+                        position: "bottom-right",
+                        duration: 5000,
+                        isClosable: true,
+                      });
+                    } else{
+                      removerUsuario(item.id)
+                    }
+                  }catch (error){
+                    console.error(error);
+                  }
+                  }}
                   colorScheme="red"
                   size="sm"
                 >
