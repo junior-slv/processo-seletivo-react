@@ -146,7 +146,6 @@ const Professores = () => {
       });
     }
   };
-
   const removerProfessor = async (id: number) => {
     try {
       await axios.delete(`${postUrl}/${id}`);

@@ -1,12 +1,6 @@
 :root{
     --text-light: #000;
     --bg-light: #fff;
-
-    --bg-dark: #000;
-    --text-dark: #fff;
-
-
-
 }
 
 .login-container {
@@ -21,18 +15,6 @@
 
   transition: 1s ease-in-out;
 }
-.login-container-dark {
-    min-height: 100vh;
-  
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  
-    background-color: var(--bg-dark);
-    color: var(--text-dark);
-
-    transition: 1s ease-in-out;
-  }
 .login-box {
   display: flex;
   align-items: center;

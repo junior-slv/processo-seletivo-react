@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import * as Yup from "yup";
 export var password: string;
 const PasswordInput = () => {
   const [showpassword, setShowpassword] = useState(false);
@@ -14,7 +13,6 @@ const PasswordInput = () => {
           type={showpassword ? "text" : "password"}
           placeholder="Insira sua senha"
           onChange={(e) => inputPassword(e)}
-          id=""
         />
       </span>
       <i

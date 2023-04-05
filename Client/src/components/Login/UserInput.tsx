@@ -1,22 +1,21 @@
 import React, { useState } from "react";
-import validator from "validator";
 import "./loginInput.css";
 export var user: string;
 const LoginInput = () => {
   const [userError, setUserError] = useState("");
-  const validateEmail = (e: React.FormEvent<HTMLInputElement>) => {
+  const User = (e: React.FormEvent<HTMLInputElement>) => {
     user = e.currentTarget.value;
     
   };
   return (
-    <div className="email-container">
-      <div className="email-input">
-              <i className="bx bx-envelope" />
+    <div className="user-container">
+      <div className="user-input">
+              <i className="bx bx-user" />
       <input
         type="text"
-        id="userEmail"
-        placeholder="Insira seu email"
-        onChange={(e) => validateEmail(e)}
+        id="user"
+        placeholder="Insira seu usuário"
+        onChange={(e) => User(e)}
       ></input>{" "}
       <br />
 

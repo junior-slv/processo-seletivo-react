@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Login.css";
-import LoginInput, { user } from "../../components/Login/EmailInput";
+import LoginInput, { user } from "../../components/Login/UserInput";
 import PasswordInput, { password } from "../../components/Login/PasswordInput";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -13,8 +13,6 @@ export let token = "";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [themeToggle, setThemeToggle] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const sendLogin = () => {
     axios
@@ -37,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <div className={themeToggle ? "login-container-dark" : "login-container"}>
+    <div className="login-container">
       <div className="login-box ">
         <div style={{ textAlign: "center", fontWeight: "600" }}>
           <h1>
@@ -45,7 +43,7 @@ const Login = () => {
           </h1>
         </div>
         <div className="login-email flex-center_column">
-          <h3>Insira seu email</h3>
+          <h3>Insira seu usuário</h3>
           <LoginInput />
         </div>
         <div className="login-password flex-center_column">
@@ -55,11 +53,6 @@ const Login = () => {
         <div className="login-button">
             <input onClick={sendLogin} type="button" value="ENVIAR >" />
         </div>
-
-        <i
-          onClick={() => setThemeToggle(!themeToggle)}
-          className="bx bx-sun"
-        ></i>
       </div>
     </div>
   );

@@ -158,7 +158,6 @@ const Colegio = () => {
       });
     }
   };
-
   const removerColegio = async (id: number) => {
     try {
       await axios.delete(`${baseURL}/${id}`);
@@ -183,7 +182,6 @@ const Colegio = () => {
       });
     }
   };
-
   const fileUpload = async () => {
     try {
       const formData = new FormData();
@@ -200,7 +198,7 @@ const Colegio = () => {
 
       toast({
         title: "Sucesso!",
-        description: "Colégio adicionado com sucesso!",
+        description: "Imagem enviada com sucesso!",
         status: "success",
         position: "bottom-right",
         duration: 5000,
@@ -355,7 +353,7 @@ const Colegio = () => {
                     Simbolo
                   </Text>
                   <div>
-                    <label htmlFor="image-uploader">Select an image:</label>
+                    <label htmlFor="image-uploader">Selecione uma imagem:</label>
                     <Input
                       type="file"
                       id="image-uploader"
@@ -369,7 +367,7 @@ const Colegio = () => {
                         }
                       }}
                     />
-                    <button onClick={fileUpload}>ENVIAR</button>
+                    <Button onClick={fileUpload}>ENVIAR IMAGEM</Button>
                   </div>
                 </Flex>
               </div>

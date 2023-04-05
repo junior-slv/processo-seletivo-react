@@ -64,9 +64,9 @@ const Salas = () => {
   const [protocolo, setProtocolo] = useState("");
   const [operation, setOperation] = useState("");
   const [selectedValue, setSelectedValue] = useState("");
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+
   useEffect(() => {
     fetchSalas();
     fetchProfessores();
@@ -242,17 +242,19 @@ const Salas = () => {
     <div className="salas-container">
       <Sidebar />
       <div className="salas-content">
-        <Flex minWidth="max-content" alignItems="center" gap="2" padding="1rem">
-          <Box p="2">
-            <Heading size="md">Gerenciador de Salas</Heading>
-          </Box>
-          <Spacer />
-          <ButtonGroup gap="2">
-            <Button onClick={addOnOpen} colorScheme="green">
-              Adicionar sala
-            </Button>
-          </ButtonGroup>
-        </Flex>
+         <Box>
+          <Flex minWidth="max-content" alignItems="center" gap="2" padding="1rem">
+            <Box p="2">
+              <Heading size="md">Gerenciador de Salas</Heading>
+            </Box>
+            <Spacer />
+            <ButtonGroup gap="2">
+              <Button onClick={addOnOpen} colorScheme="green">
+                Adicionar sala
+              </Button>
+            </ButtonGroup>
+          </Flex>
+         </Box>
         <SimpleGrid columns={[1, null, 2, 3]} spacing={4}>
           {dados.map((sala) => (
             <Card key={sala.id}>
@@ -269,18 +271,20 @@ const Salas = () => {
                       {sala.capacidadeMesas}
                     </Text>
                     <Text fontWeight="bold" fontSize="lg">
+                    <Box>
                       <Menu>
-                        <MenuButton as={Button}>
-                          Lista de Professores
-                        </MenuButton>
-                        <MenuList>
-                          {professores.map((professor) => (
-                            <MenuItem key={professor.id}>
-                              {professor.nome}
-                            </MenuItem>
-                          ))}
-                        </MenuList>
-                      </Menu>
+                          <MenuButton as={Button}>
+                            Lista de Professores
+                          </MenuButton>
+                          <MenuList>
+                            {professores.map((professor) => (
+                              <MenuItem key={professor.id}>
+                                {professor.nome}
+                              </MenuItem>
+                            ))}
+                          </MenuList>
+                        </Menu>
+                    </Box>
                     </Text>
                   </GridItem>
                   <GridItem

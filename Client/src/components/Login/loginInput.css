@@ -7,10 +7,10 @@
     align-items: center;
     flex-direction: column;
 }
-.email-input{
+.user-input{
     display: flex;
 }
-.email-input input{
+.user-input input{
     background: none;
     border: none;
     border-bottom: 1px solid #000;

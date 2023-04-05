@@ -12,7 +12,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Stack,
   Table,
   Text,
   Tbody,
@@ -22,16 +21,10 @@ import {
   Tr,
   useDisclosure,
   Box,
-  Center,
   Flex,
-  Square,
   ButtonGroup,
   Heading,
   Spacer,
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
   useToast,
 } from "@chakra-ui/react";
 let id: number;
@@ -44,7 +37,7 @@ interface Usuario {
 }
 
 const Usuarios = () => {
-  const [dados, setDados] = useState<Colegio[]>([]);
+  const [dados, setDados] = useState<Usuario[]>([]);
   const [userLogin, setUserLogin] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [operation, setOperation] = useState("");
@@ -58,13 +51,9 @@ const Usuarios = () => {
     onOpen();
     setOperation("Adicionar");
   };
-  const editOnOpen = () => {
-    onOpen();
-    setOperation("Editar");
-  };
   const fetchUsuarios = () => {
     axios
-      .get<Usuarios[]>(`${postUrl}/allusers`)
+      .get<Usuario[]>(`${postUrl}/allusers`)
       .then((response) => {
         setDados(response.data);
       })
@@ -104,8 +93,6 @@ const Usuarios = () => {
       });
     }
   };
-
-
   const removerUsuario = async (id: number) => {
     try {
       await axios.delete(`${postUrl}/${id}`);
@@ -136,17 +123,19 @@ const Usuarios = () => {
     <div className="usuario-container">
       <Sidebar />
       <div className="usuario-content">
+      <Box>
         <Flex minWidth="max-content" alignItems="center" gap="2" padding="1rem">
-          <Box p="2">
-            <Heading size="md">Gerenciador de Usuários</Heading>
-          </Box>
-          <Spacer />
-          <ButtonGroup gap="2">
-            <Button onClick={addOnOpen} colorScheme="green">
-              Adicionar usuário
-            </Button>
-          </ButtonGroup>
-        </Flex>
+            <Box p="2">
+              <Heading size="md">Gerenciador de Usuários</Heading>
+            </Box>
+            <Spacer />
+            <ButtonGroup gap="2">
+              <Button onClick={addOnOpen} colorScheme="green">
+                Adicionar usuário
+              </Button>
+            </ButtonGroup>
+          </Flex>
+      </Box>
 
         <Table variant="striped" colorScheme="blue">
           <Thead>
@@ -241,7 +230,7 @@ const Usuarios = () => {
                 mr={3}
                 onClick={(e) => {
                   e.preventDefault();
-                  operation === "Adicionar" ? criarUsuario() : editarUsuario(id);
+                  criarUsuario();
                 }}
               >
                 {operation}
