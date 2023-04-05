@@ -357,9 +357,6 @@ const Colegio = () => {
                   </Text>
                   <div>
                     <label htmlFor="image-uploader">Select an image:</label>
-                    <Flex>
-                      {/* <i onChange={(event: React.ChangeEvent<HTMLInputElement>) =>  className="bx bx-box"></i> */}
-                    </Flex>
                     <Input
                       type="file"
                       id="image-uploader"
