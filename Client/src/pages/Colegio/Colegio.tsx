@@ -2,7 +2,6 @@ import React, { ChangeEvent, useEffect, useState, useCallback } from "react";
 import "./Colegio.css";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
-import img from "../../../../Server/uploads/colegio/img.png";
 import {
   Button,
   Input,

@@ -1,5 +1,6 @@
+import path from "path";
 import db from "../models";
-
+const multer = require('multer');
 
 const Sala: any = db.salas;
 
@@ -48,10 +49,37 @@ const deleteSala = async (req: any, res: any) => {
     res.status(200).send("Sala removida!");
   };
 
+
+
+  const storage = multer.diskStorage({
+
+    destination: function (req:any, file:any, cb:any) {
+      cb(null, 'uploads/sala')
+    },
+    filename: function  (req:any, file:any, cb:any) {
+      cb(null, file.originalname)
+    }
+  });
+  
+  const upload = multer({ storage: storage });
+
+
+
+  function uploadProtocolo(req:any, res:any) {
+    upload.single('file')(req, res, function(err:any) {
+      if (err) {
+        return res.status(500).send(err);
+      }
+      return res.status(200).send('Arquivo enviado com sucesso!');
+    });
+  }
+
+
 module.exports = {
     addSala,
     getAllSalas,
     getSala,
     updateSala,
     deleteSala,
+    uploadProtocolo,
 }

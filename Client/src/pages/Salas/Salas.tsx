@@ -1,40 +1,14 @@
 import React, { useEffect, useState } from "react";
-import "./Salas.css";
+import FileDownload from 'js-file-download';
 import Sidebar from "../../components/Sidebar/Sidebar";
 import axios from "axios";
 import {
-  Card,
-  CardBody,
-  SimpleGrid,
-  Grid,
-  GridItem,
-  Heading,
-  Text,
-  Button,
-  Flex,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-  useToast,
-  Box,
-  ButtonGroup,
-  Spacer,
-  Radio,
-  RadioGroup,
-  Stack,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
+  Card, CardBody, SimpleGrid, Grid, GridItem, Heading, Text, Button, Flex, Input,
+  Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
+  useDisclosure, useToast, Box, ButtonGroup, Spacer, Radio, RadioGroup, Stack, Menu,
+  MenuButton, MenuList, MenuItem
 } from "@chakra-ui/react";
-import operation from "antd/es/transfer/operation";
-import { fetchProfessores } from "../Professores/Professores";
+import "./Salas.css";
 let id: number;
 const baseURL = "http://localhost:3001/api/salas";
 const postUrl = "http://localhost:3001/api/professor";
@@ -45,7 +19,7 @@ interface Sala {
   capacidadeMesas: string;
   bloqueada: Boolean;
   gradeAulas: string;
-  protocolo: Buffer;
+  protocolo: string;
 }
 interface Professor {
   id: number;
@@ -82,17 +56,45 @@ const Salas = () => {
         console.log(error);
       });
   };
-  function handleDisponibilidade(value: React.SetStateAction<string>) {
-    setSelectedValue(value);
-    console.log(selectedValue);
-  }
+  const fileUpload = async () => {
+    try {
+      const formData = new FormData();
+      if (file) {
+        formData.append("file", file);
+        axios.post(`${baseURL}/upload`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      } else {
+        console.log("Nenhum documento selecionada.");
+      }
+
+      toast({
+        title: "Sucesso!",
+        description: "Documento enviado com sucesso!",
+        status: "success",
+        position: "bottom-right",
+        duration: 5000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Erro!",
+        description: "Não foi possível realizar a requisição.",
+        status: "error",
+        position: "bottom-right",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
   const fetchSalas = () => {
     axios
       .get<Sala[]>(`${baseURL}/allsalas`)
       .then((response) => {
         setDados(response.data);
-        // let prof: any = Object.values(response.data[0]?.professores);
-        // setProfessores(prof);
       })
       .catch((error) => {
         console.log(error);
@@ -162,6 +164,7 @@ const Salas = () => {
       setBloqueada(selectedValue === "1" ? false : true);
       setGradeAulas("");
       setProtocolo("");
+      fileUpload
       onClose();
       toast({
         title: "Sucesso!",
@@ -237,12 +240,9 @@ const Salas = () => {
                     <Text fontWeight="bold" fontSize="lg">
                       {sala.capacidadeMesas}
                     </Text>
-                    {/* <Text fontSize="sm" color="gray.500">
-                      Professores
-                    </Text> */}
                     <Text fontWeight="bold" fontSize="lg">
                       <Menu>
-                        <MenuButton as={Button}>Professores</MenuButton>
+                        <MenuButton as={Button}>Lista de Professores</MenuButton>
                         <MenuList>
                           {professores.map((professor) => (
                             <MenuItem key={professor.id}>
@@ -253,9 +253,14 @@ const Salas = () => {
                       </Menu>
                     </Text>
                   </GridItem>
-                  <GridItem>
-                    <Text>
-                      {sala.bloqueada  ? (
+                  <GridItem
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    flexDirection="column"
+                  >
+                    <Text textAlign="center">
+                      {sala.bloqueada ? (
                         <Text fontWeight="bold" fontSize="lg" color="red">
                           Ocupada
                         </Text>
@@ -272,7 +277,7 @@ const Salas = () => {
                         setCapacidadeMesas(sala.capacidadeMesas);
                         setBloqueada(selectedValue === "1" ? false : true);
                         setGradeAulas(sala.gradeAulas);
-                        setProtocolo("a");
+                        setProtocolo("");
                         editOnOpen();
                       }}
                       colorScheme="blue"
@@ -286,6 +291,28 @@ const Salas = () => {
                       size="sm"
                     >
                       Remover
+                    </Button>
+                    <Button
+                      colorScheme="yellow"
+                      size="sm"
+                    >
+                      Grade de Aulas
+                    </Button>
+                    <Button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        axios({
+                          url:`http://localhost:3001/api/salas/download/${sala.protocolo}`,
+                          method: "GET",
+                          responseType: "blob",
+                        }).then((res) =>{
+                          FileDownload(res.data, `${sala.protocolo}`)
+                        })
+                      }}
+                      colorScheme="purple"
+                      size="sm"
+                    >
+                      Protocólo
                     </Button>
                   </GridItem>
                 </Grid>
@@ -369,11 +396,19 @@ const Salas = () => {
                     Grade de Aulas
                   </Text>
                   <Input
-                    type="text"
-                    name=""
-                    value={gradeAulas}
-                    onChange={(e) => setGradeAulas(e.target.value)}
+                    type="file"
+                    id="image-uploader"
+                    accept="image/*"
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      setFile(event.target.files?.[0] ?? null);
+                      const file = event.target.files?.[0] ?? null;
+                      setFile(file);
+                      if (file) {
+                        setProtocolo(file.name);
+                      }
+                    }}
                   />
+                  <Button onClick={fileUpload}>ENVIAR</Button>
                 </Flex>
                 <Flex>
                   <Text
@@ -385,11 +420,19 @@ const Salas = () => {
                     Protocolo
                   </Text>
                   <Input
-                    type="text"
-                    name=""
-                    value={protocolo}
-                    onChange={(e) => setProtocolo(e.target.value)}
+                    type="file"
+                    id="image-uploader"
+                    accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      setFile(event.target.files?.[0] ?? null);
+                      const file = event.target.files?.[0] ?? null;
+                      setFile(file);
+                      if (file) {
+                        setProtocolo(file.name);
+                      }
+                    }}
                   />
+                  <Button onClick={fileUpload}>ENVIAR</Button>
                 </Flex>
               </div>
             </ModalBody>
