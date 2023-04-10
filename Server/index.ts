@@ -1,22 +1,23 @@
 import express from "express";
-const multer = require('multer');
 const app = express();
 const port = process.env.PORT || 3001;
 const cors = require('cors')
 import db from "./models";
-import path from "path";
+import { users } from "./seeders/users";
 var corsOptions = {
-    origin: "http://127.0.0.1:5173"
+    origin: "http://localhost:5173"
 }
-const TIMEOUT = 10 * 60 * 1000;
+
+const createUser = () => {
+  users.map(user =>{
+    db.User.create(user)
+  })
+}
+// createUser()
 
 
 
 
-
-
-
-app.set('server.timeout', TIMEOUT);
 //middleware
 app.use(cors(corsOptions))
 app.use(express.json())

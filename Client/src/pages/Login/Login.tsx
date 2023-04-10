@@ -26,7 +26,7 @@ const Login = () => {
           isAdmin = true;
         }
         isAuth = true;
-        navigate('/dashboard');
+        navigate('/colegio');
       })
       .catch(function (error) {
         console.log(error);

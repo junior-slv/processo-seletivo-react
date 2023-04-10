@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from "react";
 import Login from "../pages/Login/Login";
-import Dashboard from "../pages/Dashboard/Dashboard";
 import PrivateRoutes from "./privateRoutes";
 import Salas from "../pages/Salas/Salas";
 import Colegio from "../pages/Colegio/Colegio";
@@ -12,14 +11,6 @@ const Rotas = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoutes>
-              <Dashboard />
-            </PrivateRoutes>
-          }
-        />
         <Route
           path="/salas"
           element={

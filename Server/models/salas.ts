@@ -58,7 +58,7 @@ module.exports = (sequelize: any, DataTypes: any) => {
         allowNull: false,
       },
       protocolo: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(128),
         allowNull: false,
       }
     },
